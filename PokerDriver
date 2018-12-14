@@ -1,0 +1,131 @@
+package poker;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class PokerDriver 
+{
+	static int randomNum;
+	static int randomNum2;
+	static int randomNum3;
+	public static void main(String[] args)
+	{
+		int bet;
+		int moneyPot = 0;
+		int yourScore = 0;
+		int comScore = 0;
+		
+		Random rnd = new Random();
+		randomNum = (rnd.nextInt(10) + 1);
+		randomNum2 = (rnd.nextInt(10) + 1);
+		
+		Money myMoney = new Money(15);
+		Money comMoney = new Money(10);
+		
+		StartingHand myHand = new StartingHand(randomNum, randomNum2);
+		randomNum = (rnd.nextInt(10) + 1);
+		randomNum2 = (rnd.nextInt(10) + 1);
+		StartingHand comHand = new StartingHand(randomNum, randomNum2);
+		
+		ComputerPlayer comPlayer = new ComputerPlayer(comScore, comMoney.getMoney());
+		
+		
+		System.out.println(myHand.toString());
+		System.out.println(comHand.toString());
+		
+		Scanner input = new Scanner(System.in);
+		System.out.println("Enter your bet");
+		bet = input.nextInt();
+		
+		moneyPot += bet;
+		moneyPot += comPlayer.comBet();
+		
+		BetMoney myBet = new BetMoney(bet);
+		
+		if(myBet.checkBet() && comPlayer.checkBet())
+		{
+			randomNum = (rnd.nextInt(10) + 1);
+			randomNum2 = (rnd.nextInt(10) + 1);
+			randomNum3 = (rnd.nextInt(10) + 1);
+			myMoney.setMoney(myMoney.getMoney() - bet);
+			System.out.println("Money: " + myMoney.getMoney());
+			DrawCard flop = new DrawCard(randomNum, randomNum2, randomNum3);
+			System.out.println(flop.toString());
+			CheckHand checkMyHand = new CheckHand(myHand.getHand(), flop.getFlop());
+			CheckHand checkComHand = new CheckHand(comHand.getHand(), flop.getFlop());
+			checkMyHand.checkScoreFlop();
+			checkComHand.checkScoreFlop();
+			
+			yourScore += checkMyHand.getScore();
+			comScore += checkComHand.getScore();
+			
+//			System.out.println(checkMyHand.getScore());
+//			System.out.println(checkComHand.getScore());
+		}
+		
+		
+		System.out.println("Enter your bet");
+		bet = input.nextInt();
+		
+		moneyPot += bet;
+		
+		if(myBet.checkBet() && comPlayer.checkBet())
+		{
+			randomNum = (rnd.nextInt(10) + 1);
+			myMoney.setMoney(myMoney.getMoney() - bet);
+			System.out.println("Money: " + myMoney.getMoney());
+			DrawCard turn = new DrawCard(randomNum);
+			System.out.println("Turn: " + turn.toString());
+			CheckHand checkMyHand = new CheckHand(myHand.getHand(), turn.getRiver());
+			CheckHand checkComHand = new CheckHand(comHand.getHand(), turn.getRiver());
+			checkMyHand.checkScoreTurn();
+			checkComHand.checkScoreTurn();
+			
+			yourScore += checkMyHand.getScore();
+			comScore += checkComHand.getScore();
+//			
+//			System.out.println(yourScore);
+//			System.out.println(comScore);
+		}
+		
+		System.out.println("Enter your bet");
+		bet = input.nextInt();
+		
+		moneyPot += bet;
+		
+		if(myBet.checkBet() && comPlayer.checkBet())
+		{
+			randomNum = (rnd.nextInt(10) + 1);
+			myMoney.setMoney(myMoney.getMoney() - bet);
+			System.out.println("Money: " + myMoney.getMoney());
+			DrawCard turn = new DrawCard(randomNum);
+			System.out.println("River: " + turn.toString());
+			CheckHand checkMyHand = new CheckHand(myHand.getHand(), turn.getRiver());
+			CheckHand checkComHand = new CheckHand(comHand.getHand(), turn.getRiver());
+			checkMyHand.checkScoreTurn();
+			checkComHand.checkScoreTurn();
+			
+			yourScore += checkMyHand.getScore();
+			comScore += checkComHand.getScore();
+			
+			System.out.println(yourScore);
+			System.out.println(comScore);
+		}
+		
+		System.out.println("Money pot: " + moneyPot);
+		
+		if(yourScore > comScore)
+		{
+			myMoney.setMoney(myMoney.getMoney() + moneyPot);;
+		}
+		else
+		{
+			comMoney.setMoney(comMoney.getMoney() + moneyPot);
+		}
+		
+		System.out.println(myMoney.getMoney());
+		System.out.println(comMoney.getMoney());
+		
+		
+	}
+}
