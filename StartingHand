@@ -1,0 +1,33 @@
+package poker;
+
+public class StartingHand 
+{
+	private int card1, card2;
+	private int [] hand = new int [2];
+	public StartingHand(int card1, int card2)
+	{
+		this.card1 = card1;
+		this.card2 = card2;
+		hand[0] = card1;
+		hand[1] = card2;
+	}
+	
+	public int[] getHand()
+	{
+		return hand;
+	}
+	
+	public String toString()
+	{
+		String output = "Cards: ";
+		for(int index = 0; index < hand.length; index++)
+		{
+			if(index == 1)
+				output += hand[index];
+			else
+			output += hand[index] + ",";
+		}
+		return output;
+	}
+
+}
