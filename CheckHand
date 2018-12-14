@@ -1,0 +1,95 @@
+package poker;
+
+public class CheckHand 
+{
+	private int[] hand;
+	private int[] flop;
+	private int river;
+	private int score = 0;
+	private int potMoney = 0;
+	public CheckHand(int[] hand, int[] flop)
+	{
+		this.hand = hand;
+		this.flop = flop;
+	}
+	
+	public CheckHand(int[] hand, int river)
+	{
+		this.hand = hand;
+		this.river = river;
+	}
+	
+	public void checkScoreFlop()
+	{
+		checkPairFlop();
+	}
+	
+	public void checkScoreTurn()
+	{
+		checkPairTurn();
+	}
+	
+	public void checkPairFlop()
+	{
+		if(hand[0] == hand[1])
+		{
+			score++;
+		}
+		if(flop[0] == flop[1])
+		{
+			score++;
+		}
+		if(flop[1] == flop[2])
+		{
+			score++;
+		}
+		if(flop[0] == flop[2])
+		{
+			score++;
+		}
+		for(int index = 0; index < flop.length - 1; index++)
+		{
+			if(hand[0] == flop[index])
+			{
+				score++;
+			}
+			if(hand[1] == flop[index])
+			{
+				score++;
+			}
+//			if(index != 2)
+//			{
+//				if(flop[index] == flop[index + 1])
+//				{
+//					score++;
+//				}
+//				if(flop[index] == flop[index + 1])
+//				{
+//					score++;
+//				}
+//			}
+		}
+	}
+	
+	public void checkPairTurn()
+	{
+		if(hand[0] == river)
+		{
+			score++;
+		}
+		if(hand[1] == river)
+		{
+			score++;
+		}
+	}
+	
+	public int getScore()
+	{
+		return score;
+	}
+	
+	public int getPotMoney()
+	{
+		return potMoney;
+	}
+}
