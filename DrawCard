@@ -1,0 +1,50 @@
+package poker;
+
+public class DrawCard 
+{
+	int[] flop = new int[3];
+	int river;
+	
+	public DrawCard(int card1, int card2, int card3)
+	{
+		flop[0] = card1;
+		flop[1] = card2;
+		flop[2] = card3;
+	}
+	
+	public DrawCard(int card1)
+	{
+		flop[0] = 0;
+		river = card1;
+	}
+	
+	public String toString()
+	{
+		if(flop[0] == 0)
+		{
+			String output = "" + river;
+			
+			return output;
+		}
+		String output = "Flop: ";
+		for(int index = 0; index < flop.length; index++)
+		{
+			if(index == 2)
+				output += flop[index];
+			else
+			output += flop[index] + ",";
+		}
+		return output;
+	}
+	
+	public int[] getFlop()
+	{
+		return flop;
+	}
+	
+	public int getRiver()
+	{
+		return river;
+	}
+
+}
