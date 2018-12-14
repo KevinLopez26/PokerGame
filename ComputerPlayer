@@ -1,0 +1,56 @@
+package poker;
+
+import java.util.Random;
+
+public class ComputerPlayer 
+{
+	int score;
+	int money;
+	public ComputerPlayer(int score, int money)
+	{
+		this.score = score;
+		this.money = money;
+	}
+	
+	public int comBet()
+	{
+		Random rnd = new Random();
+		int randomNum = (rnd.nextInt(2) + 1);
+		if(score > 1)
+		{
+			if(randomNum == 1)
+			{
+				money -= 5;
+				return 5;
+			}
+			if(randomNum == 2)
+			{
+				money -= 10;
+				return 10;
+			}
+		}
+		if(randomNum == 1)
+		{
+			money -= 5;
+			return 5;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	public boolean checkBet()
+	{
+		if(comBet() == 0)
+			return true;
+		else
+		return false;
+	}
+	
+	public void setComMoney(int money)
+	{
+		this.money = money;
+	}
+
+}
