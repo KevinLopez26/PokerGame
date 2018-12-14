@@ -1,0 +1,30 @@
+package poker;
+
+import java.util.Scanner;
+
+public class Money
+{
+	private int money;
+//	public static int bet;
+	public Money(int money)
+	{
+		this.money = money;
+	}
+
+	public void setMoney(int money)
+	{
+		this.money = money;
+	}
+
+	public int getMoney() 
+	{
+		return money;
+	}
+	
+//	public String toString()
+//	{
+//		String output;
+//		output = 
+//	}
+
+}
