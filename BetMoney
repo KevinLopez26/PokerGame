@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class BetMoney 
 {
-	int bet;
+	private int bet;
 	public BetMoney(int bet) 
 	{
 		this.bet = bet;
