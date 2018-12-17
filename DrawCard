@@ -2,8 +2,8 @@ package poker;
 
 public class DrawCard 
 {
-	int[] flop = new int[3];
-	int river;
+	private int[] flop = new int[3];
+	private int card;
 	
 	public DrawCard(int card1, int card2, int card3)
 	{
@@ -15,14 +15,14 @@ public class DrawCard
 	public DrawCard(int card1)
 	{
 		flop[0] = 0;
-		river = card1;
+		card = card1;
 	}
 	
 	public String toString()
 	{
 		if(flop[0] == 0)
 		{
-			String output = "" + river;
+			String output = "" + card;
 			
 			return output;
 		}
@@ -42,9 +42,9 @@ public class DrawCard
 		return flop;
 	}
 	
-	public int getRiver()
+	public int getCard()
 	{
-		return river;
+		return card;
 	}
 
 }
