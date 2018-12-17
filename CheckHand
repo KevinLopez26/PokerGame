@@ -4,7 +4,7 @@ public class CheckHand
 {
 	private int[] hand;
 	private int[] flop;
-	private int river;
+	private int river, firstCardHand, secondCardHand;
 	private int score = 0;
 	private int potMoney = 0;
 	public CheckHand(int[] hand, int[] flop)
@@ -13,10 +13,21 @@ public class CheckHand
 		this.flop = flop;
 	}
 	
+	public CheckHand(int firstCardHand, int secondCardHand)
+	{
+		this.firstCardHand = firstCardHand;
+		this.secondCardHand = secondCardHand;
+	}
+	
 	public CheckHand(int[] hand, int river)
 	{
 		this.hand = hand;
 		this.river = river;
+	}
+	
+	public void checkScoreHand()
+	{
+		checkPairFlop();
 	}
 	
 	public void checkScoreFlop()
@@ -27,6 +38,14 @@ public class CheckHand
 	public void checkScoreTurn()
 	{
 		checkPairTurn();
+	}
+	
+	public void checkPairHand()
+	{
+		if(hand[0] == hand[1])
+		{
+			score++;
+		}
 	}
 	
 	public void checkPairFlop()
