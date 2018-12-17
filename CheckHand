@@ -47,16 +47,16 @@ public class CheckHand
 		{
 			score++;
 		}
-		for(int index = 0; index < flop.length - 1; index++)
-		{
-			if(hand[0] == flop[index])
-			{
-				score++;
-			}
-			if(hand[1] == flop[index])
-			{
-				score++;
-			}
+//		for(int index = 0; index < flop.length - 1; index++)
+//		{
+//			if(hand[0] == flop[index])
+//			{
+//				score++;
+//			}
+//			if(hand[1] == flop[index])
+//			{
+//				score++;
+//			}
 //			if(index != 2)
 //			{
 //				if(flop[index] == flop[index + 1])
@@ -68,7 +68,7 @@ public class CheckHand
 //					score++;
 //				}
 //			}
-		}
+//		}
 	}
 	
 	public void checkPairTurn()
