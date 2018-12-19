@@ -2,7 +2,7 @@ package poker;
 
 import java.util.Random;
 
-public class ComputerPlayer 
+public class ComputerPlayer implements Bet
 {
 	private int score;
 	private int bet = 0;
@@ -10,39 +10,33 @@ public class ComputerPlayer
 	{
 		this.score = score;
 	}
-	
-//	public void comFirstBet()
-//	{
-//		Random rnd = new Random();
-//		int randomNum = (rnd.nextInt(100) + 1);
-//		if(randomNum < 30)
-//		{
-//			bet += 5;
-//		}
-//		else
-//		{
-//			bet += 5;
-//		}
-//	}
-	
+
 	public void comBet()
 	{
 		Random rnd = new Random();
 		int randomNum = (rnd.nextInt(100) + 1);
 		if(score >= 1)
 		{
-			if(randomNum <= 80)
+			if(randomNum <= 20)
+			{
+				bet += 15;
+			}
+			if(randomNum > 20 && randomNum < 95)
 			{
 				bet += 10;
 			}
-			if(randomNum > 80)
+			if(randomNum >= 95)
 			{
 				bet += 5;
 			}
 		}
-		else if(randomNum > 10)
+		else if(randomNum >= 50 && randomNum < 95)
 		{
 			bet += 10;
+		}
+		else if(randomNum < 50)
+		{
+			bet += 5;
 		}
 		else
 		{
@@ -50,7 +44,7 @@ public class ComputerPlayer
 		}
 	}
 	
-	public boolean checkComBet()
+	public boolean checkBet()
 	{
 		comBet();
 		if(bet == 0)
@@ -64,12 +58,12 @@ public class ComputerPlayer
 		this.score = score;
 	}
 	
-	public void setComBet(int bet)
+	public void setBet(int bet)
 	{
 		this.bet = bet;
 	}
 	
-	public int getComBet()
+	public int getBet()
 	{
 		return bet;
 	}
