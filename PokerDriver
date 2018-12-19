@@ -11,8 +11,9 @@ public class PokerDriver
 		int randomNum;
 		int randomNum2;
 		int randomNum3;
-		int bet = 5;
-		int comBet = 5;
+		int money = 0;
+		int bet = 0;
+		int comBet = 0;
 		int moneyPot = 0;
 		int yourScore = 0;
 		int comScore = 0;
@@ -24,82 +25,206 @@ public class PokerDriver
 		randomNum = (rnd.nextInt(10) + 1);
 		randomNum2 = (rnd.nextInt(10) + 1);
 		
-		//Sets the money
-		Money myMoney = new Money(30);
-		Money comMoney = new Money(30);
+		Scanner input = new Scanner(System.in);
 		
+		//Sets the money
+		while(bool)
+		{
+			System.out.println("Enter the amount of money you want to play with 25-500");
+			money = input.nextInt();
+			if(money >= 25 && money <= 500)
+			{
+				bool = false;
+			}
+		}
+		bool = true;
+		
+		Money myMoney = new Money(money);
+		Money comMoney = new Money(money);
+		
+		while(myMoney.getMoney() >= 25 && comMoney.getMoney() >= 25)
+		{
 		//Starting Hands
-		StartingHand myHand = new StartingHand(5, 5);
+		StartingHand myHand = new StartingHand(randomNum, randomNum2);
 		//Random Numbers for computer Starting hand
 		randomNum = (rnd.nextInt(10) + 1);
 		randomNum2 = (rnd.nextInt(10) + 1);
-		StartingHand comHand = new StartingHand(1, 5);
+		StartingHand comHand = new StartingHand(randomNum, randomNum2);
 		
+		//checks the score your opening hands
 		CheckHand checkMyStartingHand = new CheckHand(myHand.getFirstCardHand(), myHand.getSecondCardHand());
 		CheckHand checkComStartingHand = new CheckHand(comHand.getFirstCardHand(), comHand.getSecondCardHand());
+		checkMyStartingHand.checkScoreHand();
+		checkComStartingHand.checkScoreHand();
 		yourScore += checkMyStartingHand.getScore();
 		comScore += checkComStartingHand.getScore();
 		
 		ComputerPlayer comPlayer = new ComputerPlayer(comScore);
 		
-		Scanner input = new Scanner(System.in);
-		System.out.println("Entry is 5 dollars");
-		bet = input.nextInt();
-		
-		System.out.println(myHand.toString());
-		System.out.println(comHand.toString());
-		
-		//Gets your bet and adds it to the pot
-		System.out.println("Enter your bet");
-		bet = input.nextInt();
-		
-		BetMoney myBet = new BetMoney(bet);
+		//entry money
+		while(bool)
+		{
+			System.out.println("Entry is 5 dollars");
+			bet = input.nextInt();
+			if(bet == 5)
+			{
+				bool = false;
+			}
+		}
+		bool = true;
+
+		//entry bet
+		comMoney.setMoney(comMoney.getMoney() - 5);
+		myMoney.setMoney(myMoney.getMoney() - 5);
+		System.out.println("Money: " + myMoney.getMoney());
+		System.out.println("Computer Money: " + comMoney.getMoney());
+		moneyPot += bet;
 		moneyPot += bet;
 		
-		//Computer decides to fold or bet
-		comPlayer.setComBet(0);
-		comPlayer.setComScore(comScore);
-		computerBet = comPlayer.checkComBet();
-		System.out.println("Check " + comPlayer.getComBet());
-		comBet = comPlayer.getComBet();
-		moneyPot += comPlayer.getComBet();
+		System.out.println(myHand.toString());
 		
-		
-		
-		//Flop Card Draw
-		if(myBet.checkBet())
-		{
-			randomNum = (rnd.nextInt(10) + 1);
-			randomNum2 = (rnd.nextInt(10) + 1);
-			randomNum3 = (rnd.nextInt(10) + 1);
-			comMoney.setMoney(comMoney.getMoney() - comBet);
-			myMoney.setMoney(myMoney.getMoney() - bet);
-			System.out.println("Money: " + myMoney.getMoney());
-			System.out.println("Computer Money: " + comMoney.getMoney());
-			DrawCard flop = new DrawCard(2, 3, 6);
-			System.out.println(flop.toString());
-			CheckHand checkMyHand = new CheckHand(myHand.getHand(), flop.getFlop());
-			CheckHand checkComHand = new CheckHand(comHand.getHand(), flop.getFlop());
-			checkMyHand.checkScoreFlop();
-			checkComHand.checkScoreFlop();
-			
-			yourScore += checkMyHand.getScore();
-			comScore += checkComHand.getScore();
-			
-//			System.out.println(checkMyHand.getScore());
-//			System.out.println(checkComHand.getScore());
-		}
+		BetMoney myBet = new BetMoney(bet);
 		
 		//Computer decides to fold or bet
-		comPlayer.setComBet(0);
+		comPlayer.setBet(0);
 		comPlayer.setComScore(comScore);
-		computerBet = comPlayer.checkComBet();
-		System.out.println("Check " + comPlayer.getComBet());
-		comBet = comPlayer.getComBet();
-		moneyPot += comPlayer.getComBet();
+		computerBet = comPlayer.checkBet();
+//		System.out.println("Check " + comPlayer.getComBet());
+		comBet = comPlayer.getBet();
+		comMoney.setMoney(comMoney.getMoney() - comBet);
+		moneyPot += comPlayer.getBet();
 		
 		//Checks if computer folded
 		if(computerBet)
+		{
+			System.out.println("Enter your bet");
+			bet = input.nextInt();
+		
+			myBet.setBet(bet);
+
+			moneyPot += bet;
+		}
+		
+		//Flop Card Draw
+		if(myBet.checkBet() && computerBet)
+		{
+			if(bet == comPlayer.getBet())
+			{
+				randomNum = (rnd.nextInt(10) + 1);
+				randomNum2 = (rnd.nextInt(10) + 1);
+				randomNum3 = (rnd.nextInt(10) + 1);
+				myMoney.setMoney(myMoney.getMoney() - bet);
+				System.out.println("Money: " + myMoney.getMoney());
+				System.out.println("Computer Money: " + comMoney.getMoney());
+				DrawCard flop = new DrawCard(randomNum, randomNum2, randomNum3);
+				System.out.println(flop.toString());
+				CheckHand checkMyHand = new CheckHand(myHand.getCard(), flop.getFlop());
+				CheckHand checkComHand = new CheckHand(comHand.getCard(), flop.getFlop());
+				checkMyHand.checkScoreFlop();
+				checkComHand.checkScoreFlop();
+			
+				yourScore += checkMyHand.getScore();
+				comScore += checkComHand.getScore();
+			
+			
+				System.out.println(checkMyHand.getScore());
+//				System.out.println(checkComHand.getScore());
+			}
+			if(comPlayer.getBet() < bet)
+			{
+				comMoney.setMoney(comMoney.getMoney() + comPlayer.getBet());
+				comPlayer.setBet(0);
+				comPlayer.setComScore(comScore);
+				if(comPlayer.checkBet())
+				{
+					moneyPot += bet;
+					randomNum = (rnd.nextInt(10) + 1);
+					randomNum2 = (rnd.nextInt(10) + 1);
+					randomNum3 = (rnd.nextInt(10) + 1);
+					myMoney.setMoney(myMoney.getMoney() - bet);
+					comMoney.setMoney(comMoney.getMoney() - bet);
+					System.out.println("Money: " + myMoney.getMoney());
+					System.out.println("Computer Money: " + comMoney.getMoney());
+					DrawCard flop = new DrawCard(randomNum, randomNum2, randomNum3);
+					System.out.println(flop.toString());
+					CheckHand checkMyHand = new CheckHand(myHand.getCard(), flop.getFlop());
+					CheckHand checkComHand = new CheckHand(comHand.getCard(), flop.getFlop());
+					checkMyHand.checkScoreFlop();
+					checkComHand.checkScoreFlop();
+				
+					yourScore += checkMyHand.getScore();
+					comScore += checkComHand.getScore();
+				}
+				else
+				{
+					computerBet = false;
+				}
+			}
+		//checks to see if you betted the same amount
+			else
+			{
+				int temp = comPlayer.getBet() - bet;
+				int tempBet = bet;
+					while(bool)
+					{
+						if(bet < comPlayer.getBet())
+						{
+							System.out.println("Your opponent entered a higher bet put " + temp + " more dollars");
+							bet += input.nextInt();
+							
+							if(bet == tempBet)
+							{
+								myMoney.setMoney(myMoney.getMoney() - bet);
+								myBet.setBet(0);
+								bool = false;
+							}
+					
+							else if(bet < temp)
+							{
+								bet = bet - bet;
+							}
+							else
+							{
+								randomNum = (rnd.nextInt(10) + 1);
+								randomNum2 = (rnd.nextInt(10) + 1);
+								randomNum3 = (rnd.nextInt(10) + 1);
+								myMoney.setMoney(myMoney.getMoney() - bet);
+								System.out.println("Money: " + myMoney.getMoney());
+								System.out.println("Computer Money: " + comMoney.getMoney());
+								DrawCard flop = new DrawCard(randomNum, randomNum2, randomNum3);
+								System.out.println(flop.toString());
+								CheckHand checkMyHand = new CheckHand(myHand.getCard(), flop.getFlop());
+								CheckHand checkComHand = new CheckHand(comHand.getCard(), flop.getFlop());
+								checkMyHand.checkScoreFlop();
+								checkComHand.checkScoreFlop();
+					
+								yourScore += checkMyHand.getScore();
+								comScore += checkComHand.getScore();
+							}
+						}
+						else
+						{
+							bool = false;
+						}
+					}
+			}
+	}
+		bool = true;
+		
+		if(myBet.checkBet() && computerBet)
+		{
+			//Computer decides to fold or bet
+			comPlayer.setBet(0);
+			comPlayer.setComScore(comScore);
+			computerBet = comPlayer.checkBet();
+//			System.out.println("Check " + comPlayer.getComBet());
+			comBet = comPlayer.getBet();
+			comMoney.setMoney(comMoney.getMoney() - comBet);
+			moneyPot += comPlayer.getBet();
+		}
+		
+		//Checks if computer folded
+		if(myBet.checkBet() && computerBet)
 		{
 			System.out.println("Enter your bet");
 			bet = input.nextInt();
@@ -112,35 +237,72 @@ public class PokerDriver
 		//Draw Turn Card if you betted
 		if(myBet.checkBet() && computerBet)
 		{
-			if(bet == comPlayer.getComBet())
+			if(bet == comPlayer.getBet())
 			{
 				randomNum = (rnd.nextInt(10) + 1);
 				myMoney.setMoney(myMoney.getMoney() - bet);
-				comMoney.setMoney(comMoney.getMoney() - comPlayer.getComBet());
-				DrawCard turn = new DrawCard(8);
+//				comMoney.setMoney(comMoney.getMoney() - comPlayer.getComBet());
+				DrawCard turn = new DrawCard(randomNum);
 				System.out.println("Turn: " + turn.toString());
 				System.out.println("Money: " + myMoney.getMoney());
 				System.out.println("Computer Money: " + comMoney.getMoney());
-				CheckHand checkMyHand = new CheckHand(myHand.getHand(), turn.getCard());
-				CheckHand checkComHand = new CheckHand(comHand.getHand(), turn.getCard());
+				CheckHand checkMyHand = new CheckHand(myHand.getCard(), turn.getCard());
+				CheckHand checkComHand = new CheckHand(comHand.getCard(), turn.getCard());
 				checkMyHand.checkScoreTurn();
 				checkComHand.checkScoreTurn();
 			
 				yourScore += checkMyHand.getScore();
 				comScore += checkComHand.getScore();
 			}
+			if(comPlayer.getBet() < bet)
+			{
+				comMoney.setMoney(comMoney.getMoney() + comPlayer.getBet());
+				comPlayer.setBet(0);
+				comPlayer.setComScore(comScore);
+				if(comPlayer.checkBet())
+				{
+					moneyPot += bet;
+					randomNum = (rnd.nextInt(10) + 1);
+					myMoney.setMoney(myMoney.getMoney() - bet);
+					comMoney.setMoney(comMoney.getMoney() - bet);
+					DrawCard turn = new DrawCard(randomNum);
+					System.out.println("Turn: " + turn.toString());
+					System.out.println("Money: " + myMoney.getMoney());
+					System.out.println("Computer Money: " + comMoney.getMoney());
+					CheckHand checkMyHand = new CheckHand(myHand.getCard(), turn.getCard());
+					CheckHand checkComHand = new CheckHand(comHand.getCard(), turn.getCard());
+					checkMyHand.checkScoreTurn();
+					checkComHand.checkScoreTurn();
+					
+					yourScore += checkMyHand.getScore();
+					comScore += checkComHand.getScore();
+				}
+				else
+				{
+					computerBet = false;
+				}
+			}
+			
 			//checks to see if you betted the same amount
 			else
 			{
-				int temp = comPlayer.getComBet() - bet;
+				int temp = comPlayer.getBet() - bet;
+				int tempBet = bet;
 				while(bool)
 				{
-					if(bet != comPlayer.getComBet())
+					if(bet < comPlayer.getBet())
 					{
 						System.out.println("Your opponent entered a higher bet put " + temp + " more dollars");
 						bet += input.nextInt();
 						
-						if(bet < temp)
+						if(bet == tempBet)
+						{
+							myMoney.setMoney(myMoney.getMoney() - bet);
+							myBet.setBet(0);
+							bool = false;
+						}
+						
+						else if(bet < temp)
 						{
 							bet = bet - bet;
 						}
@@ -148,13 +310,12 @@ public class PokerDriver
 						{
 							randomNum = (rnd.nextInt(10) + 1);
 							myMoney.setMoney(myMoney.getMoney() - bet);
-							comMoney.setMoney(comMoney.getMoney() - comPlayer.getComBet());
-							DrawCard turn = new DrawCard(8);
+							DrawCard turn = new DrawCard(randomNum);
 							System.out.println("Turn: " + turn.toString());
 							System.out.println("Money: " + myMoney.getMoney());
 							System.out.println("Computer Money: " + comMoney.getMoney());
-							CheckHand checkMyHand = new CheckHand(myHand.getHand(), turn.getCard());
-							CheckHand checkComHand = new CheckHand(comHand.getHand(), turn.getCard());
+							CheckHand checkMyHand = new CheckHand(myHand.getCard(), turn.getCard());
+							CheckHand checkComHand = new CheckHand(comHand.getCard(), turn.getCard());
 							checkMyHand.checkScoreTurn();
 							checkComHand.checkScoreTurn();
 						
@@ -162,7 +323,7 @@ public class PokerDriver
 							comScore += checkComHand.getScore();
 			
 							myBet.setBet(bet);
-							myMoney.setMoney(myMoney.getMoney() - bet);
+//							myMoney.setMoney(myMoney.getMoney() - bet);
 			
 							moneyPot += bet;
 						}
@@ -174,20 +335,23 @@ public class PokerDriver
 				}
 			}
 		}
+		bool = true;
 		
 		//Computer decides to fold or bet
-		if(computerBet)
+		if(myBet.checkBet() && computerBet)
 		{
-			comPlayer.setComBet(0);
+			//Computer decides to fold or bet
+			comPlayer.setBet(0);
 			comPlayer.setComScore(comScore);
-//			comPlayer.comBet();
-			computerBet = comPlayer.checkComBet();
-			System.out.println("Check " + comPlayer.getComBet());
-			moneyPot += comPlayer.getComBet();
+			computerBet = comPlayer.checkBet();
+//			System.out.println("Check " + comPlayer.getComBet());
+			comBet = comPlayer.getBet();
+			comMoney.setMoney(comMoney.getMoney() - comBet);
+			moneyPot += comPlayer.getBet();
 		}
 		
 		//checks if computer betted to know to continue
-		if(computerBet)
+		if(myBet.checkBet() && computerBet)
 		{
 			System.out.println("Enter your bet");
 			bet = input.nextInt();
@@ -200,79 +364,230 @@ public class PokerDriver
 		//checks if you betted for River card
 		if(myBet.checkBet() && computerBet)
 		{
-			randomNum = (rnd.nextInt(10) + 1);
-			myMoney.setMoney(myMoney.getMoney() - bet);
-			comMoney.setMoney(comMoney.getMoney() - comPlayer.getComBet());
-			DrawCard turn = new DrawCard(9);
-			System.out.println("River: " + turn.toString());
-			System.out.println("Money: " + myMoney.getMoney());
-			System.out.println("Computer Money: " + comMoney.getMoney());
-			CheckHand checkMyHand = new CheckHand(myHand.getHand(), turn.getCard());
-			CheckHand checkComHand = new CheckHand(comHand.getHand(), turn.getCard());
-			checkMyHand.checkScoreTurn();
-			checkComHand.checkScoreTurn();
+			if(bet == comPlayer.getBet())
+			{
+				randomNum = (rnd.nextInt(10) + 1);
+				myMoney.setMoney(myMoney.getMoney() - bet);
+//				comMoney.setMoney(comMoney.getMoney() - comPlayer.getComBet());
+				DrawCard turn = new DrawCard(randomNum);
+				System.out.println("River: " + turn.toString());
+				System.out.println("Money: " + myMoney.getMoney());
+				System.out.println("Computer Money: " + comMoney.getMoney());
+				CheckHand checkMyHand = new CheckHand(myHand.getCard(), turn.getCard());
+				CheckHand checkComHand = new CheckHand(comHand.getCard(), turn.getCard());
+				checkMyHand.checkScoreTurn();
+				checkComHand.checkScoreTurn();
 			
-			yourScore += checkMyHand.getScore();
-			comScore += checkComHand.getScore();
+				yourScore += checkMyHand.getScore();
+				comScore += checkComHand.getScore();
 			
-//			System.out.println(yourScore);
-//			System.out.println(comScore);
+//				System.out.println(yourScore);
+//				System.out.println(comScore);
+			}
+			if(comPlayer.getBet() < bet)
+			{
+				comMoney.setMoney(comMoney.getMoney() + comPlayer.getBet());
+				comPlayer.setBet(0);
+				comPlayer.setComScore(comScore);
+				if(comPlayer.checkBet())
+				{
+					moneyPot += bet;
+					randomNum = (rnd.nextInt(10) + 1);
+					myMoney.setMoney(myMoney.getMoney() - bet);
+					comMoney.setMoney(comMoney.getMoney() - bet);
+					DrawCard turn = new DrawCard(randomNum);
+					System.out.println("River: " + turn.toString());
+					System.out.println("Money: " + myMoney.getMoney());
+					System.out.println("Computer Money: " + comMoney.getMoney());
+					CheckHand checkMyHand = new CheckHand(myHand.getCard(), turn.getCard());
+					CheckHand checkComHand = new CheckHand(comHand.getCard(), turn.getCard());
+					checkMyHand.checkScoreTurn();
+					checkComHand.checkScoreTurn();
+					
+					yourScore += checkMyHand.getScore();
+					comScore += checkComHand.getScore();
+				}
+				else
+				{
+					computerBet = false;
+				}
+			}
+		//checks to see if you betted the same amount
+			else
+			{
+				int temp = comPlayer.getBet() - bet;
+				int tempBet = bet;
+					while(bool)
+					{
+						if(bet < comPlayer.getBet())
+						{
+							System.out.println("Your opponent entered a higher bet put " + temp + " more dollars");
+							bet += input.nextInt();
+							
+							if(bet == tempBet)
+							{
+								myMoney.setMoney(myMoney.getMoney() - bet);
+								myBet.setBet(0);
+								bool = false;
+							}
+					
+							else if(bet < temp)
+							{
+								bet = bet - bet;
+							}
+							else
+							{
+								randomNum = (rnd.nextInt(10) + 1);
+								myMoney.setMoney(myMoney.getMoney() - bet);
+								DrawCard turn = new DrawCard(randomNum);
+								System.out.println("River: " + turn.toString());
+								System.out.println("Money: " + myMoney.getMoney());
+								System.out.println("Computer Money: " + comMoney.getMoney());
+								CheckHand checkMyHand = new CheckHand(myHand.getCard(), turn.getCard());
+								CheckHand checkComHand = new CheckHand(comHand.getCard(), turn.getCard());
+								checkMyHand.checkScoreTurn();
+								checkComHand.checkScoreTurn();
+							
+								yourScore += checkMyHand.getScore();
+								comScore += checkComHand.getScore();
+		
+								myBet.setBet(bet);
+//								myMoney.setMoney(myMoney.getMoney() - bet);
+		
+								moneyPot += bet;
+							}
+						}
+						else
+						{
+							bool = false;
+						}
+					}
+			}
 		}
+		bool = true;
 		
 		//Computer decides to fold or bet
-		if(computerBet)
+		if(myBet.checkBet() && computerBet)
 		{
-			comPlayer.setComBet(0);
+			//Computer decides to fold or bet
+			comPlayer.setBet(0);
 			comPlayer.setComScore(comScore);
-//			comPlayer.comBet();
-			computerBet = comPlayer.checkComBet();
-			
-			System.out.println("Check " + comPlayer.getComBet());
-			moneyPot += comPlayer.getComBet();
-			comMoney.setMoney(comMoney.getMoney() - comPlayer.getComBet());
+			computerBet = comPlayer.checkBet();
+//			System.out.println("Check " + comPlayer.getComBet());
+			comBet = comPlayer.getBet();
+			comMoney.setMoney(comMoney.getMoney() - comBet);
+			moneyPot += comPlayer.getBet();
 		}
 				
 		//checks if computer betted to know to continue
-		if(computerBet)
+		if(myBet.checkBet() && computerBet)
 		{
-			System.out.println("Enter your bet");
+			System.out.println("Enter your final bet");
 			bet = input.nextInt();
 			
 			myBet.setBet(bet);
 				
 			moneyPot += bet;
 			myMoney.setMoney(myMoney.getMoney() - bet);
-		}
+			//checks if the computer betted less than you
+			if(comPlayer.getBet() < bet)
+			{
+				comPlayer.setBet(0);
+				comPlayer.setComScore(comScore);
+				if(comPlayer.checkBet())
+				{
+					comMoney.setMoney(comMoney.getMoney() - bet);
+					moneyPot += bet;
+				}
+				else
+				{
+					computerBet = false;
+				}
+			}
+			//checks if you betted less than the computer
+			else if(bet < comPlayer.getBet())
+			{
+				int tempBet = bet;
+				int temp = comPlayer.getBet() - bet;
+				while(bool)
+				{
+					System.out.println("Your opponent entered a higher bet put " + temp + " more dollars");
+					bet += input.nextInt();
+					
+					if(bet == tempBet)
+					{
+						myMoney.setMoney(myMoney.getMoney() - bet);
+						myBet.setBet(0);
+						bool = false;
+					}
+	
+					if(bet < temp)
+					{
+						bet = bet - bet;
+					}
+					else
+					{
+						myMoney.setMoney(myMoney.getMoney() - bet);
+						bool = false;
+					}
+				}
+			}
+		} 
 		
+		System.out.println("You had a score of " + yourScore + " Opponent had a score of " + comScore);
 		System.out.println("Money pot: " + moneyPot);
 		
 		//you win because opponent folded
 		if(myBet.checkBet() && computerBet == false)
 		{
 			myMoney.setMoney(myMoney.getMoney() + moneyPot);
-			System.out.println("Oppenent folded you win " + moneyPot);
+			System.out.println("Oppenent folded you win");
+			System.out.println("Computer money " + comMoney.getMoney());
 			System.out.println("Total Money is " + myMoney.getMoney());
 		}
 		
 		//opponent wins because you folded
-		if(myBet.checkBet() == false && computerBet)
+		else if(myBet.checkBet() == false && computerBet)
 		{
 			comMoney.setMoney(comMoney.getMoney() + moneyPot);
-			System.out.println("You lose " + moneyPot);
-			System.out.println("Total Money computer money " + comMoney.getMoney());
+			moneyPot = moneyPot - comBet;
+			System.out.println("You folded");
+			System.out.println("Computer money " + comMoney.getMoney());
+			System.out.println("Total Money is " + myMoney.getMoney());
 		}
 		else if(yourScore > comScore)
 		{
 			myMoney.setMoney(myMoney.getMoney() + moneyPot);
-			System.out.println("You win " + moneyPot);
+			System.out.println("You win your Opponent " + comHand.toString());
+			System.out.println("Computer money " + comMoney.getMoney());
+			System.out.println("Total Money is " + myMoney.getMoney());
+		}
+		else if(yourScore == comScore)
+		{
+			System.out.println("You tied Opponent " + comHand.toString());
+			System.out.println("Computer money " + comMoney.getMoney());
 			System.out.println("Total Money is " + myMoney.getMoney());
 		}
 		else
 		{
 			comMoney.setMoney(comMoney.getMoney() + moneyPot);
-			System.out.println("You lose " + moneyPot);
-			System.out.println("Total Money computer money " + comMoney.getMoney());
+			System.out.println("You lose Opponent " + comHand.toString() );
+			System.out.println("Computer money " + comMoney.getMoney());
+			System.out.println("Total Money is " + myMoney.getMoney());
+		}
 		}
 		
+		if(comMoney.getMoney() < 25)
+		{
+			comMoney.setMoney(money);
+			myMoney.setMoney(money);
+			System.out.println("You won the computer doesn't have enough money to play");
+		
+		}
+		if(myMoney.getMoney() < 25)
+		{
+			System.out.println("You lost you don't have enough money to play");
+		
+		}
 	}
 }
