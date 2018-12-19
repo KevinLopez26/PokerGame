@@ -1,0 +1,9 @@
+package poker;
+
+public interface Bet 
+{
+	boolean checkBet();
+	void setBet(int bet);
+	int getBet();
+
+}
