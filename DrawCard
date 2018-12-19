@@ -1,6 +1,6 @@
 package poker;
 
-public class DrawCard 
+public class DrawCard
 {
 	private int[] flop = new int[3];
 	private int card;
