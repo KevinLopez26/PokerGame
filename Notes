@@ -1,0 +1,12 @@
+Description
+The game that I made is poker. It is a simple game with you(The player) and the computer. The objective of the game is to make the opponent
+have less than 25 dollars. You win by getting pairs of cards like 3, 3. However, a 2,2,2 will beat a 9,9. The more pairs the better.
+You can change the amount of money you and the opponent start with.
+
+How to Play
+The game only take numbers as inputs. 5, 10, and 15 are betting numbers while the rest are considered a "fold" which means you lose that
+round and all the money you spent into it.
+
+Interesting Features
+1.Ability to change the money you start with
+2.Opponent can put a higher bet than you
