@@ -1,22 +1,27 @@
 package poker;
 
-public class StartingHand 
+public class StartingHand
 {
-	private int card1, card2;
 	private int [] hand = new int [2];
 	public StartingHand(int card1, int card2)
 	{
-		this.card1 = card1;
-		this.card2 = card2;
 		hand[0] = card1;
 		hand[1] = card2;
 	}
 	
-	public int[] getHand()
+	public int[] getCard()
 	{
 		return hand;
 	}
 	
+	public int getFirstCardHand() 
+	{
+		return hand[0];
+	}
+	public int getSecondCardHand() 
+	{
+		return hand[1];
+	}
 	public String toString()
 	{
 		String output = "Cards: ";
@@ -29,5 +34,6 @@ public class StartingHand
 		}
 		return output;
 	}
+
 
 }
