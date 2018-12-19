@@ -2,9 +2,9 @@ package poker;
 
 public class CheckHand 
 {
-	private int[] hand;
+	private int[] hand = new int[2];
 	private int[] flop;
-	private int river, firstCardHand, secondCardHand;
+	private int river;
 	private int score = 0;
 	private int potMoney = 0;
 	public CheckHand(int[] hand, int[] flop)
@@ -15,8 +15,8 @@ public class CheckHand
 	
 	public CheckHand(int firstCardHand, int secondCardHand)
 	{
-		this.firstCardHand = firstCardHand;
-		this.secondCardHand = secondCardHand;
+		this.hand[0] = firstCardHand;
+		this.hand[1] = secondCardHand;
 	}
 	
 	public CheckHand(int[] hand, int river)
@@ -27,7 +27,7 @@ public class CheckHand
 	
 	public void checkScoreHand()
 	{
-		checkPairFlop();
+		checkPairHand();
 	}
 	
 	public void checkScoreFlop()
@@ -50,10 +50,6 @@ public class CheckHand
 	
 	public void checkPairFlop()
 	{
-		if(hand[0] == hand[1])
-		{
-			score++;
-		}
 		if(flop[0] == flop[1])
 		{
 			score++;
@@ -66,6 +62,15 @@ public class CheckHand
 		{
 			score++;
 		}
+		if(flop[0] == hand[0] ||flop[1] == hand[0] || flop[2] == hand[0])
+		{
+			score++;
+		}
+		if(flop[0] == hand[1] ||flop[1] == hand[1] || flop[2] == hand[1])
+		{
+			score++;
+		}
+		
 //		for(int index = 0; index < flop.length - 1; index++)
 //		{
 //			if(hand[0] == flop[index])
